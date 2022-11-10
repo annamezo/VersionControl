@@ -10,7 +10,7 @@ namespace UserMaintenance
         {
             InitializeComponent();
             lblFirstName.Text = Resource1.LastName; // label1
-            lblFirstName.Text = Resource1.FirstName; // label2
+           // lblFirstName.Text = Resource1.FirstName; // label2
             btnAdd.Text = Resource1.Add; // button1
 
             listUsers.DataSource = users;
@@ -22,8 +22,8 @@ namespace UserMaintenance
         {
             var u = new User()
             {
-                LastName = txtLastName.Text,
-                FirstName = txtFirstName.Text,
+                FullName = txtLastName.Text,
+              //  FirstName = txtFirstName.Text,
             };
             users.Add(u);
         }
