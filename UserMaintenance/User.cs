@@ -1,4 +1,5 @@
-﻿using System;
+﻿namespace UserMaintenance;
+using System;
 
 public class User
 {
