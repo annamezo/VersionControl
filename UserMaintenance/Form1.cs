@@ -43,5 +43,13 @@ namespace UserMaintenance
             }
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            foreach  (User item in users)
+            {
+                users.Remove(item);
+            }
+        }
     }
 }
