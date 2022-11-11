@@ -27,5 +27,21 @@ namespace UserMaintenance
             };
             users.Add(u);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            using (StreamWriter sw = new StreamWriter(sfd.FileName, false))
+            {
+                foreach (User item in users)
+                {
+                    sw.WriteLine(item.FullName+";"+item.ID);   
+                }
+            
+            }
+
+        }
     }
 }
