@@ -15,7 +15,7 @@ namespace Ramenfeladat
     {
         List<Country> countries = new List<Country>();
         List<Ramen> ramens = new List<Ramen>();
-
+        List<Brand> brands = new List<Brand>();
 
 
         public Form1()
@@ -32,7 +32,9 @@ namespace Ramenfeladat
             {
                 string[] sor = sr.ReadLine().Split(';'); //a split felbontja az adott sort tömb elemekre
                 string orszag = sor[2]; //az országot leválasztom
+                string marka = sor[0];
                 Country aktorszag = AddCountry(orszag);
+                Brand aktmarka = AddBrand(marka);
                 Ramen r = new Ramen
                 {
                     ID = ramens.Count,
@@ -40,7 +42,7 @@ namespace Ramenfeladat
                     Country = aktorszag,
                     Rating = Convert.ToDouble(sor[3]),
                     Name = aktorszag.Name,
-                    Brand = sor[0]
+                    Brand = aktmarka
                 };
                 ramens.Add(r);
 
@@ -62,6 +64,24 @@ namespace Ramenfeladat
                         Name = orszag
                     };
                     countries.Add(ered);
+                }
+                return ered;
+            }
+
+            Country AddBrand(string marka)
+            {
+                var ered = (from c in brands where c.Name.Equals(marka) select c).FirstOrDefault();
+
+                // var ered = countries.Where(i => i.Name.Equals(orszag)).FirstOrDefault(); //megvan-e már?
+
+                if (ered == null) //nincs ilyen orszag a listaban
+                {
+                    ered = new Brand
+                    {
+                        ID = brands.Count,
+                        Name = marka
+                    };
+                    brands.Add(ered);
                 }
                 return ered;
             }
