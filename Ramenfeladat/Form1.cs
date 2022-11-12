@@ -14,6 +14,8 @@ namespace Ramenfeladat
     public partial class Form1 : Form
     {
         List<Country> countries = new List<Country>();
+        List<Ramen> ramens = new List<Ramen>();
+
 
 
         public Form1()
@@ -45,7 +47,25 @@ namespace Ramenfeladat
                 }
             }
             sr.Close();
+
+            void AddCountry(string orszag)
+            {
+                var ered = (from c in countries where c.Name.Equals(orszag) select c).FirstOrDefault();
+
+                // var ered = countries.Where(i => i.Name.Equals(orszag)).FirstOrDefault(); //megvan-e már?
+
+                if (ered == null) //nincs ilyen orszag a listaban
+                {
+                    ered = new Country
+                    {
+                        ID = countries.Count,
+                        Name = orszag
+                    };
+                    countries.Add(ered);
+                }
+            }
         }
+        
         
     }
 }
