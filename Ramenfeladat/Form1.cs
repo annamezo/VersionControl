@@ -22,6 +22,7 @@ namespace Ramenfeladat
         {
             InitializeComponent();
             LoadData("ramen.csv");
+            GetCountries();
         }
 
         void LoadData(string fileName)
@@ -50,43 +51,60 @@ namespace Ramenfeladat
             }
             sr.Close();
 
-            Country AddCountry(string orszag)
-            {
-                var ered = (from c in countries where c.Name.Equals(orszag) select c).FirstOrDefault();
+           
 
-                // var ered = countries.Where(i => i.Name.Equals(orszag)).FirstOrDefault(); //megvan-e már?
 
-                if (ered == null) //nincs ilyen orszag a listaban
-                {
-                    ered = new Country
-                    {
-                        ID = countries.Count,
-                        Name = orszag
-                    };
-                    countries.Add(ered);
-                }
-                return ered;
-            }
-
-            Country AddBrand(string marka)
-            {
-                var ered = (from c in brands where c.Name.Equals(marka) select c).FirstOrDefault();
-
-                // var ered = countries.Where(i => i.Name.Equals(orszag)).FirstOrDefault(); //megvan-e már?
-
-                if (ered == null) //nincs ilyen orszag a listaban
-                {
-                    ered = new Brand
-                    {
-                        ID = brands.Count,
-                        Name = marka
-                    };
-                    brands.Add(ered);
-                }
-                return ered;
-            }
         }
-        
-        
+
+        Country AddCountry(string orszag)
+        {
+            var ered = (from c in countries where c.Name.Equals(orszag) select c).FirstOrDefault();
+
+            // var ered = countries.Where(i => i.Name.Equals(orszag)).FirstOrDefault(); //megvan-e már?
+
+            if (ered == null) //nincs ilyen orszag a listaban
+            {
+                ered = new Country
+                {
+                    ID = countries.Count,
+                    Name = orszag
+                };
+                countries.Add(ered);
+            }
+            return ered;
+        }
+
+        Country AddBrand(string marka)
+        {
+            var ered = (from c in brands where c.Name.Equals(marka) select c).FirstOrDefault();
+
+            // var ered = countries.Where(i => i.Name.Equals(orszag)).FirstOrDefault(); //megvan-e már?
+
+            if (ered == null) //nincs ilyen orszag a listaban
+            {
+                ered = new Brand
+                {
+                    ID = brands.Count,
+                    Name = marka
+                };
+                brands.Add(ered);
+            }
+            return ered;
+        }
+
+        void GetCountries()
+        {
+            var ered = from c in countries 
+                       where c.Name.Contains(textBox1.Text) 
+                       orderby c.Name
+                       select c;
+            listBox1.DataSource = ered.ToList();
+            listBox1.DisplayMember = "Name";
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            GetCountries();
+        }
     }
 }
