@@ -32,23 +32,23 @@ namespace Ramenfeladat
             {
                 string[] sor = sr.ReadLine().Split(';'); //a split felbontja az adott sort tömb elemekre
                 string orszag = sor[2]; //az országot leválasztom
-                var ered = (from c in countries where c.Name.Equals(orszag) select c).FirstOrDefault(); 
-
-                // var ered = countries.Where(i => i.Name.Equals(orszag)).FirstOrDefault(); //megvan-e már?
-                
-                if (ered == null) //nincs ilyen orszag a listaban
+                Country aktorszag = AddCountry(orszag);
+                Ramen r = new Ramen
                 {
-                    ered = new Country
-                    {
-                        ID = countries.Count,
-                        Name = orszag
-                    };
-                    countries.Add(ered);
-                }
+                    ID = ramens.Count,
+                    CountryFK = aktorszag.ID,
+                    Country = aktorszag,
+                    Rating = Convert.ToDouble(sor[3]),
+                    Name = aktorszag.Name,
+                    Brand = sor[0]
+                };
+                ramens.Add(r);
+
+                
             }
             sr.Close();
 
-            void AddCountry(string orszag)
+            Country AddCountry(string orszag)
             {
                 var ered = (from c in countries where c.Name.Equals(orszag) select c).FirstOrDefault();
 
@@ -63,6 +63,7 @@ namespace Ramenfeladat
                     };
                     countries.Add(ered);
                 }
+                return ered;
             }
         }
         
