@@ -74,7 +74,7 @@ namespace Ramenfeladat
             return ered;
         }
 
-        Country AddBrand(string marka)
+        Brand AddBrand(string marka)
         {
             var ered = (from c in brands where c.Name.Equals(marka) select c).FirstOrDefault();
 
