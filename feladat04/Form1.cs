@@ -64,6 +64,7 @@ namespace feladat04
 
             object[,] values = new object[flats.Count, headers.Length];
             int counter = 0;
+            Excel.Range r;
 
             for (int i = 0; i < headers.Length; i++)
             {
@@ -84,6 +85,12 @@ namespace feladat04
                 counter++;
             }
 
+            r = xlSheet.get_Range(GetCell(2, 1), 
+                GetCell(flats.Count + 1, headers.Length)); //bal fölső és jobb alsó sarka a tartománynak
+            r.Value = values;
+            r = xlSheet.get_Range(GetCell(2, 9),
+                GetCell(flats.Count, 9));
+            r.Value = "=1000000*" + GetCell(2,8) + "/" + GetCell(2,7);
         }
 
         private string GetCell(int x, int y)
