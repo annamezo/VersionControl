@@ -17,6 +17,7 @@ namespace MNBweek05
     public partial class Form1 : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
+        BindingList<string> Currencies = new BindingList<string>();
 
 
         public Form1()
@@ -24,7 +25,28 @@ namespace MNBweek05
             InitializeComponent();
             dataGridView1.DataSource = Rates;
             //GetRates();
+            GetCurrencies();
             RefreshData();
+            comboBox1.DataSource = Currencies;
+        }
+
+        void GetCurrencies()
+        {
+            MNBArfolyamServiceSoapClient m = new MNBArfolyamServiceSoapClient();
+            GetCurrenciesRequestBody request = new GetCurrenciesRequestBody();
+            GetCurrenciesResponseBody response = m.GetCurrencies(request);
+            string result = response.GetCurrenciesResult;
+            XmlDocument x = new XmlDocument();
+            x.LoadXml(result);
+            //MessageBox.Show(result);
+            XmlElement item = x.DocumentElement;
+            int i = 0;
+            while (item.ChildNodes[0].ChildNodes[i] != null)
+            {
+                Currencies.Add(item.ChildNodes[0].ChildNodes[i].InnerText);
+                i++;
+            }
+            m.Close();
         }
 
         private void RefreshData()
@@ -48,19 +70,22 @@ namespace MNBweek05
             xml.LoadXml(GetRates());  //betettem a függvényhívást
             foreach (XmlElement item in xml.DocumentElement)
             {
-                RateData rd = new RateData();
-                Rates.Add(rd);
-                rd.Currency = item.ChildNodes[0].Attributes["curr"].Value;
-                rd.Date = Convert.ToDateTime(item.Attributes["date"].Value);
-                decimal unit = Convert.ToDecimal(item.ChildNodes[0].Attributes["unit"].Value);
-                decimal value = Convert.ToDecimal(item.ChildNodes[0].InnerText);
-                if (unit != 0)
+                if (item.ChildNodes[0] != null)
                 {
-                    rd.Value = value / unit;
-                }
-                else
-                {
-                    rd.Value = value;
+                    RateData rd = new RateData();
+                    Rates.Add(rd);
+                    rd.Currency = item.ChildNodes[0].Attributes["curr"].Value;
+                    rd.Date = Convert.ToDateTime(item.Attributes["date"].Value);
+                    decimal unit = Convert.ToDecimal(item.ChildNodes[0].Attributes["unit"].Value);
+                    decimal value = Convert.ToDecimal(item.ChildNodes[0].InnerText);
+                    if (unit != 0)
+                    {
+                        rd.Value = value / unit;
+                    }
+                    else
+                    {
+                        rd.Value = value;
+                    }
                 }
 
             }
