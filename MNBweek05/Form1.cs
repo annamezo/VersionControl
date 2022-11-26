@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace MNBweek05
 {
@@ -21,11 +22,36 @@ namespace MNBweek05
         {
             InitializeComponent();
             dataGridView1.DataSource = Rates;
-            GetRates();
+            //GetRates();
 
+            ReadXml();
         }
 
-        private static void GetRates()
+        private void ReadXml()
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(GetRates());  //betettem a függvényhívást
+            foreach (XmlElement item in xml.DocumentElement)
+            {
+                RateData rd = new RateData();
+                Rates.Add(rd);
+                rd.Currency = item.ChildNodes[0].Attributes["curr"].Value;
+                rd.Date = Convert.ToDateTime(item.Attributes["date"].Value);
+                decimal unit = Convert.ToDecimal(item.ChildNodes[0].Attributes["unit"].Value);
+                decimal value = Convert.ToDecimal(item.ChildNodes[0].InnerText);
+                if (unit != 0)
+                {
+                    rd.Value = value / unit;
+                }
+                else
+                {
+                    rd.Value = value;
+                }
+
+            }
+        }
+
+        private static string GetRates()
         {
             MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
             GetExchangeRatesRequestBody request = new GetExchangeRatesRequestBody()
@@ -36,7 +62,8 @@ namespace MNBweek05
             };
             GetExchangeRatesResponseBody response = mnbService.GetExchangeRates(request);
             string result = response.GetExchangeRatesResult;
-            //MessageBox.Show(result);
+            MessageBox.Show(result);
+            return result;  //így függvény lesz
         }
     }
 }
