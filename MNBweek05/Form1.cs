@@ -24,10 +24,11 @@ namespace MNBweek05
         {
             InitializeComponent();
             dataGridView1.DataSource = Rates;
+            comboBox1.DataSource = Currencies;
             //GetRates();
             GetCurrencies();
             RefreshData();
-            comboBox1.DataSource = Currencies;
+            
         }
 
         void GetCurrencies()
