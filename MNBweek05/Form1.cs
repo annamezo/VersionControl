@@ -1,4 +1,5 @@
-﻿using MNBweek05.MnbServiceReference;
+﻿using MNBweek05.Entities;
+using MNBweek05.MnbServiceReference;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,10 +14,19 @@ namespace MNBweek05
 {
     public partial class Form1 : Form
     {
+        BindingList<RateData> Rates = new BindingList<RateData>();
+
+
         public Form1()
         {
             InitializeComponent();
+            dataGridView1.DataSource = Rates;
+            GetRates();
 
+        }
+
+        private static void GetRates()
+        {
             MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
             GetExchangeRatesRequestBody request = new GetExchangeRatesRequestBody()
             {
@@ -26,8 +36,7 @@ namespace MNBweek05
             };
             GetExchangeRatesResponseBody response = mnbService.GetExchangeRates(request);
             string result = response.GetExchangeRatesResult;
-            // MessageBox.Show(result);
-
+            //MessageBox.Show(result);
         }
     }
 }
